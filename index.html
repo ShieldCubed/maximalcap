@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maximalcap — Physical AI Capital</title>
+<meta name="description" content="Maximalcap — a fund-of-funds vehicle for the Physical AI stack: from spatial world models to autonomous physical action. For institutional and sophisticated investors only." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,400&family=Spline+Sans+Mono:wght@400;500;600&family=Spline+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0a0a0b;
+    --bg-2:#0e0e10;
+    --ink:#ece8df;
+    --ink-dim:#8d887d;
+    --ink-faint:#5a564e;
+    --gold:#c9a96a;
+    --gold-bright:#e0c184;
+    --line:rgba(201,169,106,.16);
+    --line-soft:rgba(236,232,223,.07);
+    --serif:"Fraunces",Georgia,serif;
+    --mono:"Spline Sans Mono",ui-monospace,monospace;
+    --sans:"Spline Sans",system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  /* subtle grid + grain backdrop */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--line-soft) 1px,transparent 1px),
+      linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 30%,transparent 80%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 28px}
+  .mono{font-family:var(--mono);letter-spacing:.22em;text-transform:uppercase;font-size:.66rem;color:var(--ink-dim)}
+  .gold{color:var(--gold)}
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- header ---------- */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
+    background:linear-gradient(180deg,rgba(10,10,11,.92),rgba(10,10,11,.55));
+    border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .brand{display:flex;align-items:center;gap:13px}
+  .brand svg{width:42px;height:42px;display:block;filter:drop-shadow(0 0 14px rgba(201,169,106,.25))}
+  .brand .name{font-family:var(--serif);font-weight:600;font-size:1.32rem;letter-spacing:.01em;line-height:1}
+  .brand .tag{font-family:var(--mono);font-size:.56rem;letter-spacing:.34em;color:var(--ink-faint);text-transform:uppercase;margin-top:3px}
+  .nav-links{display:flex;gap:34px;align-items:center}
+  .nav-links a{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);transition:color .25s}
+  .nav-links a:hover{color:var(--gold-bright)}
+  .nav-cta{border:1px solid var(--line);padding:9px 18px;border-radius:2px;color:var(--ink)!important;transition:all .25s}
+  .nav-cta:hover{border-color:var(--gold);background:rgba(201,169,106,.07)}
+  @media(max-width:720px){.nav-links a:not(.nav-cta){display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{padding:120px 0 90px;position:relative}
+  .hero .eyebrow{margin-bottom:30px;display:flex;align-items:center;gap:16px}
+  .hero .eyebrow .rule{height:1px;width:54px;background:var(--gold)}
+  h1{font-family:var(--serif);font-weight:300;font-size:clamp(3rem,8vw,6rem);line-height:.96;letter-spacing:-.02em}
+  h1 b{font-weight:600;font-style:italic;color:var(--gold)}
+  .lede{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(1.25rem,2.4vw,1.7rem);color:var(--ink-dim);max-width:680px;margin-top:30px;line-height:1.45}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:0;margin-top:62px;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  .hero-stats .cell{flex:1;min-width:200px;padding:26px 30px;border-right:1px solid var(--line)}
+  .hero-stats .cell:last-child{border-right:none}
+  .hero-stats .big{font-family:var(--serif);font-size:2.1rem;font-weight:500;color:var(--gold);line-height:1}
+  .hero-stats .lbl{margin-top:9px}
+  @media(max-width:720px){.hero-stats .cell{border-right:none;border-bottom:1px solid var(--line)}}
+
+  /* ---------- section scaffold ---------- */
+  section{padding:74px 0;border-top:1px solid var(--line-soft)}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:46px}
+  .sec-head .idx{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:.2em}
+  .sec-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,3.6vw,2.5rem);letter-spacing:-.01em}
+
+  /* ---------- stack ---------- */
+  .stack{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  .stack .layer{background:var(--bg-2);padding:30px 26px;min-height:188px;display:flex;flex-direction:column;transition:background .3s}
+  .stack .layer:hover{background:#131316}
+  .stack .layer .k{margin-bottom:18px}
+  .stack .layer h3{font-family:var(--serif);font-size:1.32rem;font-weight:500;margin-bottom:8px}
+  .stack .layer p{font-size:.86rem;color:var(--ink-dim);line-height:1.55}
+  .stack .layer .badge{margin-top:auto;font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);padding-top:18px}
+  .stack .layer.own{background:linear-gradient(160deg,rgba(201,169,106,.08),rgba(10,10,11,.2))}
+  .stack .layer.own .badge{color:var(--gold)}
+  @media(max-width:900px){.stack{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.stack{grid-template-columns:1fr}}
+  .stack-note{margin-top:18px;font-size:.74rem;color:var(--ink-faint);max-width:760px;line-height:1.55}
+
+  /* ---------- structure ---------- */
+  .grid-struct{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  .grid-struct .s{background:var(--bg-2);padding:24px 20px}
+  .grid-struct .s .lbl{margin-bottom:11px}
+  .grid-struct .s .v{font-family:var(--serif);font-size:1.1rem;font-weight:500;line-height:1.2}
+  @media(max-width:820px){.grid-struct{grid-template-columns:repeat(2,1fr)}}
+
+  /* ---------- terms ---------- */
+  .terms{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .terms .card{border:1px solid var(--line);border-radius:3px;padding:34px 32px;background:linear-gradient(165deg,rgba(255,255,255,.012),transparent)}
+  .terms .card .num{font-family:var(--serif);font-size:2.6rem;font-weight:300;color:var(--gold);line-height:1}
+  .terms .card h4{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;margin:14px 0 12px;color:var(--ink)}
+  .terms .card p{font-size:.9rem;color:var(--ink-dim);line-height:1.6}
+  @media(max-width:720px){.terms{grid-template-columns:1fr}}
+
+  .pull{margin-top:34px;border-left:2px solid var(--gold);padding:6px 0 6px 24px;font-family:var(--serif);font-style:italic;font-size:1.12rem;color:var(--ink);max-width:840px;line-height:1.55}
+
+  /* ---------- contact ---------- */
+  .contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:54px;align-items:start}
+  @media(max-width:820px){.contact-grid{grid-template-columns:1fr;gap:36px}}
+  .contact-copy h2{font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.05;letter-spacing:-.01em;margin-bottom:20px}
+  .contact-copy p{color:var(--ink-dim);font-size:.95rem;margin-bottom:16px;max-width:420px}
+  .contact-copy .direct{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--gold);margin-top:24px}
+  form{display:flex;flex-direction:column;gap:16px}
+  .field label{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:7px}
+  .field input,.field textarea{width:100%;background:var(--bg-2);border:1px solid var(--line);border-radius:2px;color:var(--ink);
+    font-family:var(--sans);font-size:.92rem;padding:13px 14px;transition:border-color .25s,background .25s}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--gold);background:#131316}
+  .field textarea{resize:vertical;min-height:118px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:520px){.row{grid-template-columns:1fr}}
+  button.submit{margin-top:6px;background:var(--gold);color:#0a0a0b;border:none;border-radius:2px;
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;
+    padding:15px;cursor:pointer;transition:background .25s,transform .15s}
+  button.submit:hover{background:var(--gold-bright)}
+  button.submit:active{transform:translateY(1px)}
+  button.submit:disabled{opacity:.5;cursor:not-allowed}
+  .form-note{font-size:.7rem;color:var(--ink-faint);line-height:1.5}
+  #formMsg{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;margin-top:4px;min-height:1em}
+  #formMsg.ok{color:var(--gold-bright)}
+  #formMsg.err{color:#d98b7a}
+  #formMsg.fallback{font-family:var(--sans);letter-spacing:normal;text-transform:none;font-size:.82rem;line-height:1.7;color:var(--ink-dim)}
+  #formMsg.fallback strong{color:#d98b7a;display:block;margin-bottom:6px;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+  #formMsg.fallback a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--line)}
+  #formMsg.fallback a:hover{color:var(--gold-bright)}
+  #formMsg.fallback .chan{display:block}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:54px 0 46px;margin-top:30px}
+  .foot-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:30px;align-items:flex-start}
+  .foot-ent .e{font-family:var(--serif);font-size:1rem;color:var(--ink);line-height:1.5}
+  .foot-ent .loc{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);margin-top:8px}
+  .foot-links{display:flex;gap:28px}
+  .foot-links a{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--gold);transition:color .25s}
+  .foot-links a:hover{color:var(--gold-bright)}
+  .disclaimer{margin-top:40px;padding-top:26px;border-top:1px solid var(--line-soft);font-size:.68rem;color:var(--ink-faint);line-height:1.7;max-width:920px}
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
+  .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- =================== HEADER =================== -->
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Maximalcap home">
+      <!-- Original Garuda / divine-eagle mark (vector, designed for Maximalcap) -->
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Maximalcap Garuda mark">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#e0c184"/>
+            <stop offset="1" stop-color="#b8923f"/>
+          </linearGradient>
+        </defs>
+        <!-- left wing -->
+        <path fill="url(#g)" d="M50 40 C36 30 22 27 6 31 c10 3 14 7 16 12 -10 -2 -16 0 -22 5 11 0 16 3 20 8 -7 1 -11 4 -14 9 12 -4 21 -4 30 -1 z"/>
+        <!-- right wing (mirror) -->
+        <path fill="url(#g)" d="M50 40 C64 30 78 27 94 31 c-10 3 -14 7 -16 12 10 -2 16 0 22 5 -11 0 -16 3 -20 8 7 1 11 4 14 9 -12 -4 -21 -4 -30 -1 z"/>
+        <!-- head + beak -->
+        <path fill="url(#g)" d="M50 30 c-5 0 -9 4 -9 9 0 4 2 7 5 9 l-1 6 5 -3 5 3 -1 -6 c3 -2 5 -5 5 -9 0 -5 -4 -9 -9 -9z"/>
+        <circle cx="46.5" cy="38" r="1.5" fill="#0a0a0b"/>
+        <path fill="#0a0a0b" d="M50 41 l-4 4 4 1 4 -1z"/>
+        <!-- body / tail -->
+        <path fill="url(#g)" d="M50 53 c-4 0 -7 3 -7 7 l3 18 4 6 4 -6 3 -18 c0 -4 -3 -7 -7 -7z" opacity=".92"/>
+      </svg>
+      <span>
+        <span class="name">Maximalcap</span><br>
+        <span class="tag">Physical AI Capital</span>
+      </span>
+    </a>
+    <nav class="nav-links">
+      <a href="#stack">Stack</a>
+      <a href="#structure">Structure</a>
+      <a href="#terms">Co-Sponsor</a>
+      <a href="#contact" class="nav-cta">Explore Fit</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- =================== HERO =================== -->
+<section class="hero" style="border-top:none">
+  <div class="wrap">
+    <div class="eyebrow"><span class="rule"></span><span class="mono">Announcing · Qualified Investors Only</span></div>
+    <h1>The <b>Physical&nbsp;AI</b><br>Capital Stack</h1>
+    <p class="lede">The complete stack — from world models to autonomous physical action — assembled into a single investable vehicle.</p>
+
+    <div class="hero-stats">
+      <div class="cell">
+        <div class="big">$10B</div>
+        <div class="lbl mono">Target Capital Raise</div>
+      </div>
+      <div class="cell">
+        <div class="big">ADGM</div>
+        <div class="lbl mono">Master Feeder · Abu&nbsp;Dhabi</div>
+      </div>
+      <div class="cell">
+        <div class="big">VCC</div>
+        <div class="lbl mono">Singapore Feeder Structure</div>
+      </div>
+      <div class="cell">
+        <div class="big">BSX+NASDAQ</div>
+        <div class="lbl mono">Dual Listing Path</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== STACK =================== -->
+<section id="stack">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="idx">01</span><h2>The technology stack</h2></div>
+    <div class="stack reveal">
+      <div class="layer">
+        <div class="k mono">Layer 01</div>
+        <h3>Spatial World Models</h3>
+        <p>Built on spatial world-model generation from World Labs — the geometric substrate for reasoning about 3D environments.</p>
+        <div class="badge">Third-party technology · integrated</div>
+      </div>
+      <div class="layer">
+        <div class="k mono">Layer 02</div>
+        <h3>Foundation Intelligence</h3>
+        <p>Integrates open foundation-model intelligence from AMI Labs for general perception and reasoning.</p>
+        <div class="badge">Third-party technology · integrated</div>
+      </div>
+      <div class="layer own">
+        <div class="k mono">Layer 03</div>
+        <h3>Aumnium</h3>
+        <p>Our suprahuman embodied-cognition engine — the bridge from world understanding to autonomous physical action.</p>
+        <div class="badge">Cohomology Labs · proprietary</div>
+      </div>
+      <div class="layer own">
+        <div class="k mono">Layer 04</div>
+        <h3>Hardagent</h3>
+        <p>On-chain federated trust layer for verifiable, attributable autonomous agents operating in the physical world.</p>
+        <div class="badge">Cohomology Labs · proprietary</div>
+      </div>
+    </div>
+    <p class="stack-note">Third-party technologies named above are independent companies. Their mention denotes technical integration or compatibility and does not imply endorsement, affiliation, partnership, or investment by those parties in this fund.</p>
+  </div>
+</section>
+
+<!-- =================== STRUCTURE =================== -->
+<section id="structure">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="idx">02</span><h2>Fund structure</h2></div>
+    <div class="grid-struct reveal">
+      <div class="s"><div class="lbl mono">Vehicle</div><div class="v">Fund of Hedge Funds</div></div>
+      <div class="s"><div class="lbl mono">Master</div><div class="v">ADGM, Abu Dhabi</div></div>
+      <div class="s"><div class="lbl mono">Feeder</div><div class="v">Singapore VCC</div></div>
+      <div class="s"><div class="lbl mono">HoldCo Listing</div><div class="v">BSX + NASDAQ</div></div>
+      <div class="s"><div class="lbl mono">Core Technology</div><div class="v">Aumnium Cognition</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== TERMS =================== -->
+<section id="terms">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="idx">03</span><h2>Founder co-sponsor tier <span class="gold">— strictly limited</span></h2></div>
+    <div class="terms reveal">
+      <div class="card">
+        <div class="num">10%</div>
+        <h4>Allocation Eligibility</h4>
+        <p>Contributors of at least 10% of the corpus become eligible to <em>seek</em> capital allocation from the funds, subject to terms and conditions. Eligibility is not a guarantee; all allocation decisions rest with the fund managers.</p>
+      </div>
+      <div class="card">
+        <div class="num">1:4</div>
+        <h4>Warrant Ratio</h4>
+        <p>Founder shareholders may receive exercise rights to acquire HoldCo shares at a predetermined strike price following a successful dual listing, subject to the fund documents.</p>
+      </div>
+      <div class="card">
+        <div class="num">FoHC</div>
+        <h4>Founder Shares</h4>
+        <p>Founder co-sponsors hold shares in the Global HoldCo, the controlling entity of the fund-of-funds and its feeder structures.</p>
+      </div>
+      <div class="card">
+        <div class="num">Exit</div>
+        <h4>Liquidity Path</h4>
+        <p>A dual BSX + NASDAQ listing is the intended liquidity path for founder shareholders and warrant holders, subject to market and regulatory conditions.</p>
+      </div>
+    </div>
+    <p class="pull">Fund managers discharge their fiduciary responsibilities to the LPs at all times. This tier is open to institutional and sophisticated investors only — no exceptions.</p>
+  </div>
+</section>
+
+<!-- =================== CONTACT =================== -->
+<section id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-copy reveal">
+      <h2>This is not an open invitation.</h2>
+      <p>The founder co-sponsor cohort is deliberately small. We are looking for strategic partners — in robotics, energy, autonomy, or deep tech — whose own platforms are amplified by this stack, not passive capital.</p>
+      <p>Send a short description of your venture and your interest in the Physical AI stack. We respond only to messages that demonstrate genuine strategic alignment.</p>
+      <div class="direct">Direct · ren.timer@spacenet.network</div>
+    </div>
+
+    <form id="contactForm" class="reveal">
+      <!-- Web3Forms: replace the access key below (see deploy notes) -->
+      <input type="hidden" name="access_key" value="213deb93-a7cb-47dc-be8c-cd3897a77605" />
+      <input type="hidden" name="subject" value="New Maximalcap co-sponsor enquiry" />
+      <input type="hidden" name="from_name" value="Maximalcap Website" />
+      <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
+
+      <div class="row">
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" required />
+        </div>
+        <div class="field">
+          <label for="entity">Entity / Fund</label>
+          <input id="entity" name="entity" type="text" required />
+        </div>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required />
+      </div>
+      <div class="field">
+        <label for="message">Your venture &amp; interest in the stack</label>
+        <textarea id="message" name="message" required placeholder="One paragraph on your platform and how it aligns with the Physical AI stack."></textarea>
+      </div>
+      <button class="submit" type="submit">Submit Enquiry</button>
+      <div id="formMsg" aria-live="polite"></div>
+      <p class="form-note">Restricted to institutional and sophisticated investors. By submitting you confirm you qualify as such and have read the disclaimer below.</p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- =================== FOOTER =================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-ent">
+        <div class="e">Cohomology Labs Research Pvt Ltd</div>
+        <div class="e">Aumnium Technology Pvt Ltd</div>
+        <div class="loc">Bengaluru, India</div>
+      </div>
+      <div class="foot-links">
+        <a href="https://aumnium.tech/products" target="_blank" rel="noopener">aumnium.tech/products</a>
+        <a href="https://hardagent.one" target="_blank" rel="noopener">hardagent.one</a>
+      </div>
+    </div>
+    <p class="disclaimer">
+      Private &amp; confidential. This page is for informational purposes only and is not an offer or solicitation to buy or sell any security, nor a recommendation of any investment. It is directed solely at sophisticated and qualified investors. Any investment would be made only on the basis of definitive fund documents and subject to their terms. Prospective investors must obtain independent legal, tax, and financial advice. Third parties and technologies named are independent and their mention does not imply endorsement, affiliation, or investment. Past performance is not a guarantee of future results. All capital is at risk, including the risk of total loss.
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveals
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Contact form -> Web3Forms (emails submissions to your address)
+  const form = document.getElementById('contactForm');
+  const msg = document.getElementById('formMsg');
+
+  const fallback = `<strong>Submission didn't go through — reach us directly:</strong>
+    <span class="chan">Email · <a href="mailto:contact@spacenet.network">contact@spacenet.network</a></span>
+    <span class="chan">Telegram · <a href="https://t.me/g64group" target="_blank" rel="noopener">@g64group</a></span>
+    <span class="chan">WhatsApp · <a href="https://wa.me/918073293264" target="_blank" rel="noopener">+91-8073293264</a></span>
+    <span class="chan">X · <a href="https://x.com/hypershares" target="_blank" rel="noopener">@hypershares</a></span>`;
+
+  function showFallback(){ msg.className='fallback'; msg.innerHTML = fallback; }
+
+  form.addEventListener('submit', async (ev)=>{
+    ev.preventDefault();
+    const btn = form.querySelector('button');
+    btn.disabled = true; msg.className=''; msg.textContent='Sending…';
+    try{
+      const res = await fetch('https://api.web3forms.com/submit',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify(Object.fromEntries(new FormData(form)))
+      });
+      const data = await res.json();
+      if(data.success){
+        msg.className='ok'; msg.textContent='Received. We respond only to aligned enquiries.';
+        form.reset();
+      }else{
+        showFallback();
+      }
+    }catch(err){
+      showFallback();
+    }finally{ btn.disabled=false; }
+  });
+</script>
+</body>
+</html>
