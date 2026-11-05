@@ -653,13 +653,14 @@
           <h2 style="font-size:clamp(34px,4.5vw,56px);margin:14px 0 18px;">Request a private briefing.</h2>
           <p>Tell us the family question, not the program you have already been sold. A principal reviews each request. We reply only if the mandate fits.</p>
           <p style="margin-top:20px;">MaximalCap.xyz<br />Private client desk<br />By appointment, in person or secure call.</p>
+          <p style="margin-top:20px;">Telegram: <a href="https://t.me/g64group" target="_blank" rel="noopener" style="color:var(--gold-2);border-bottom:1px solid var(--line-strong);">@g64group</a></p>
         </div>
         <form id="briefForm">
           <label>Name<input name="name" required placeholder="Principal name" /></label>
           <label>Family office / firm<input name="office" placeholder="If applicable" /></label>
           <label>Email<input type="email" name="email" required placeholder="name@domain.com" /></label>
           <label>Phone<input name="phone" placeholder="With country code" /></label>
-          <label class="full">Primary interest
+          <label>Primary interest
             <select name="interest">
               <option>Second passport / citizenship</option>
               <option>Citizenship by investment</option>
@@ -669,9 +670,11 @@
               <option>Advisor introduction</option>
             </select>
           </label>
+          <label>Telegram<input name="telegram" placeholder="@handle (optional)" /></label>
           <label class="full">What has to be true in 24 months?<textarea name="note" required placeholder="Family, schooling, operating base, timing, mobility goals."></textarea></label>
           <p class="note">Submitting this form does not create a client relationship. Do not include account numbers, identity documents, or source-of-wealth records.</p>
           <div class="success" id="success">Received. If the briefing fits the desk, we will write to the email you gave.</div>
+          <div class="success" id="failure" style="border-color:#a14a4a;color:#e8b4b4;background:rgba(161,74,74,0.08);">We could not send that just now. Please message us on Telegram at <a href="https://t.me/g64group" target="_blank" rel="noopener" style="text-decoration:underline;">@g64group</a>.</div>
           <button class="btn solid" type="submit">Submit request</button>
         </form>
       </div>
@@ -708,6 +711,7 @@
           <p><a href="#method">Method</a></p>
           <p><a href="#families">Who instructs us</a></p>
           <p><a href="#consult">Consultation</a></p>
+          <p><a href="https://t.me/g64group" target="_blank" rel="noopener">Telegram: @g64group</a></p>
         </div>
         <div>
           <h4>Notice</h4>
@@ -834,10 +838,34 @@
       if (e.target.tagName === "A") document.getElementById("links").classList.remove("open");
     });
     document.getElementById("year").textContent = new Date().getFullYear();
-    document.getElementById("briefForm").addEventListener("submit", (e) => {
+    const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScgJlaSE9_E44oJDKV1RpE8ay8ltEoMFXj2Y5R4mOWUJXEIfQ/formResponse";
+    const ENTRY = {
+      name: "entry.227480314",
+      office: "entry.1332180290",
+      email: "entry.261222376",
+      telegram: "entry.34530384",
+      phone: "entry.108517952",
+      note: "entry.889755666",
+      interest: "entry.688441425"
+    };
+    document.getElementById("briefForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      document.getElementById("success").style.display = "block";
-      e.target.reset();
+      const form = e.target;
+      const btn = form.querySelector('button[type="submit"]');
+      const ok = document.getElementById("success");
+      const bad = document.getElementById("failure");
+      ok.style.display = "none"; bad.style.display = "none";
+      const data = new URLSearchParams();
+      for (const key in ENTRY) data.append(ENTRY[key], (form.elements[key]?.value || "").trim());
+      btn.disabled = true; const label = btn.textContent; btn.textContent = "Sending…";
+      try {
+        await fetch(FORM_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: data });
+        ok.style.display = "block"; form.reset();
+      } catch (err) {
+        bad.style.display = "block";
+      } finally {
+        btn.disabled = false; btn.textContent = label;
+      }
     });
   </script>
 </body>
